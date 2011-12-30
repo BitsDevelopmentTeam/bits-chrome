@@ -1,0 +1,14 @@
+{
+  "name": "Bits Notify",
+  "version": "0.1",
+  "description": "A BITS Notification Extension",
+  "background_page": "bits.html",
+  "browser_action": {
+    "default_icon": "img/close.jpg",
+    "default_title": "POuL chiuso"
+  },
+  "permission": [
+    "tabs",
+    "ws://bits.poul.org:8080/"
+  ]
+}
