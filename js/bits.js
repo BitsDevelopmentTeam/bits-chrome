@@ -1,8 +1,10 @@
-(function(global) {
+(function(exports) {
 
 var ws = new WebSocket("ws://bits.poul.org:8080/");
 
-ws.onmessage = wsMessageHandler;
+var handler = new Handler(chromeHandler);
+
+ws.onmessage = function(event) { handler.webSocket(handler); };
 
 chrome.browserAction.onClicked.addListener(function(tab) {
   chrome.tabs.create({url: "http://bits.poul.org"});

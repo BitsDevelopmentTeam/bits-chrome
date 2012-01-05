@@ -1,58 +1,42 @@
-(function(global) {
+(function(exports) {
 
-var first = true;
-
-var openStatus = function() {
-  with(chrome.browserAction) {
-    setIcon({path: "img/open.jpg"});
-    setTitle({title: "POuL Aperto"});
-  }
+function Handler(diffHandler) {
+  this.data = "";
+  this.diffHandler = diffHandler;
+  this.firstHandle = true;
 }
 
-var closeStatus = function() {
-  with(chrome.browserAction) {
-    setIcon({path: "img/close.jpg"});
-    setTitle({title: "POuL Chiuso"});
-  }
+Handler.prototype.webSocket = function(event) {
+  this.data = Handler.escapeHTML(event.data);
+  this.handle();
 }
 
-/* Handler functions definition */
-function statusHandler(status) {
-  return status.value == "open" ? openStatus() : closeStatus();
+Handler.prototype.handle = function() {
+  this.jsonHandler();
 }
 
-function msgHandler(msg) {
-}
-
-function tempIntHandler(tempInt) {
-}
-
-
-function jsonHandler(json) {
+Handler.prototype.jsonHandler = function() {
+  var json = JSON.parse(this.data);
   if(json.status !== undefined) {
-    statusHandler(json.status)
-  } 
+    this.diffHandler.status(json.status, this.firstHandle);
+  }
 
   if(json.msg !== undefined) {
-    msgHandler(json.msg);
-  } 
+    this.diffHandler.msg(json.msg, this.firstHandle);
+  }
   
   if(json.tempint !== undefined) {
-    tempIntHandler(json.tempint);
+    this.diffHandler.tempInt(json.tempint, this.firstHandle);
   }
 
-  if(first) first = false;
+  if(this.firstHandle) this.firstHandle = false;
 }
 
-function dataHandler(data) {
-  jsonHandler(JSON.parse(data));
+Handler.escapeHTML = function(string) {
+  return string.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-function wsMessageHandler(event) {
-  dataHandler(event.data.escapeHTML());
-}
-
-global.wsMessageHandler = wsMessageHandler;
+exports.Handler = Handler;
 
 })(this)
 
