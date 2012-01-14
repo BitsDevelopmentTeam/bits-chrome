@@ -1,13 +1,15 @@
-(function(exports) {
+(function (exports) {
+    "use strict";
 
-var ws = new WebSocket("ws://bits.poul.org:3389");
+    var ws = new exports.WebSocket("ws://bits.poul.org:3389"),
+        handler = new exports.Handler(exports.chromeHandler),
+        action = exports.chrome.browserAction,
+        tab = exports.chrome.tabs;
 
-var handler = new Handler(chromeHandler);
+    ws.onmessage = function (event) { handler.webSocket(event); };
 
-ws.onmessage = function(event) { handler.webSocket(event); };
+    action.onClicked.addListener(function () {
+        tab.create({url: "http://bits.poul.org"});
+    });
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.tabs.create({url: "http://bits.poul.org"});
-});
-
-})(this)
+}(this));
