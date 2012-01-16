@@ -4,23 +4,22 @@
 
     function openStatus() {
         c.setIcon({path: "img/open.jpg"});
-        c.setTitle({title: "POuL Aperto"});
     }
 
     function closeStatus() {
         c.setIcon({path: "img/close.jpg"});
-        c.setTitle({title: "POuL Chiuso"});
     }
 
     /* Handler functions definition */
     function statusHandler(status) {
-        return status.value === "open" ? openStatus() : closeStatus();
+        return status.value && status.value === "open" ? openStatus() : closeStatus();
     }
 
     function msgHandler(msg) {
     }
 
     function tempIntHandler(tempInt) {
+        return tempInt.value && c.setTitle({title: "Temperatura:" + tempInt.value.toPrecision(2) + "°C"});
     }
 
 
