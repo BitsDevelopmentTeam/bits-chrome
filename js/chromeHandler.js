@@ -1,6 +1,7 @@
-(function (exports) {
+module("browser_action", function (require, exports) {
     "use strict";
-    var c = exports.chrome.browserAction;
+
+    var c = require("chrome").browserAction;
 
     function openStatus() {
         c.setIcon({path: "img/open.jpg"});
@@ -29,6 +30,6 @@
         tempInt: tempIntHandler
     };
 
-}(this));
+});
 
 /* You have to read the code bottom-up */
